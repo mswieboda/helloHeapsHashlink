@@ -2,4 +2,4 @@
 -lib heaps
 -lib hlsdl
 -hl hello.hl
--main Main
+-main World
