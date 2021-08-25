@@ -19,11 +19,13 @@ class Main extends hxd.App {
   var world : h3d.scene.World;
   var shadow :h3d.pass.DefaultShadowMap;
   var tf : h2d.Text;
+  var player : h3d.scene.Object;
+
+  static inline var PLAYER_SPEED = 10;
 
   override function init() {
-    world = new WorldMesh(16, 128, s3d);
+    world = new WorldMesh(16, 256, s3d);
 
-    var treeModel = world.loadModel(hxd.Res.tree);
     var rockModel = world.loadModel(hxd.Res.rock);
 
     // add 300 rocks
@@ -39,7 +41,11 @@ class Main extends hxd.App {
     }
 
     // add tree in middle, to move around like a character
-    world.add(treeModel, 64, 64, 0, 1.2, 0);
+    var cache = new h3d.prim.ModelCache();
+    player = cache.loadModel(hxd.Res.tree);
+    player.x = 64;
+    player.y = 64;
+    s3d.addChild(player);
 
     world.done();
 
@@ -59,7 +65,14 @@ class Main extends hxd.App {
   }
 
   override function update(dt: Float) {
-    tf.text = ""+engine.drawCalls;
+    tf.text = 'player pos: [${player.x}, ${player.y}] drawCalls: ${engine.drawCalls}';
+
+    // move player left/right
+    if(hxd.Key.isDown(hxd.Key.LEFT) || hxd.Key.isDown(hxd.Key.A)) {
+      player.x -= dt * PLAYER_SPEED;
+    } else if (hxd.Key.isDown(hxd.Key.RIGHT) || hxd.Key.isDown(hxd.Key.D)) {
+      player.x += dt * PLAYER_SPEED;
+    }
 
     if(hxd.Key.isDown(hxd.Key.ESCAPE)) {
       hxd.System.exit();
