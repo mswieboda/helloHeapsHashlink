@@ -60,6 +60,10 @@ class Main extends hxd.App {
 
   override function update(dt: Float) {
     tf.text = ""+engine.drawCalls;
+
+    if(hxd.Key.isDown(hxd.Key.ESCAPE)) {
+      hxd.System.exit();
+    }
   }
 
   static function main() {
